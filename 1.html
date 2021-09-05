@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Login from Design</title>
+      
+    <link rel="stylesheet" type="text/css" href="new.css">
+<body>
+   <?php
+	if($_POST["login"]){
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname = project";
+   $credentials = "user = postgres password=root";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db) {
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+	$name=$_POST["name"];
+	$password=$_POST["password"];
+   $sql =<<<EOF
+      INSERT INTO login VALUES ('$name','$password');
+
+      
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret) {
+      echo pg_last_error($db);
+   } else {
+      echo "Records created successfully\n";
+   }
+   pg_close($db);
+	}
+?>
+     <div class="loginbox">
+      <img src="avatar.png" class="avatar">
+             <h1>Login Here</h1>
+              <form action='mn.php' method='POST'>
+               <p>DoctorName</p>
+               <input type="text" name="name" placeholder="ENTER username">
+                <p>Password</p>
+               <input type="password" name="password" placeholder="ENTER Password">
+               <input type="submit" name="login" value="Login">   
+               </form>
+
+      </div>
+
+</body>
+ </head>
+</html> 
